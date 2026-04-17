@@ -1,0 +1,110 @@
+# v0 universe: Fortaleza condohotels / pool-letting buildings.
+#
+# CRITICAL: every row here is marked `verify: true` and should be confirmed
+# before acting on its score. The condohotel/pool-letting status changes
+# (some convert to full hotel, some separate out). For each, verify:
+#   - pool_letting is currently offered
+#   - str_legal in convenção
+#   - published occupancy/ADR (reported_* fields are placeholders)
+#
+# Sources to confirm each: the building's website, Secovi-CE condohotel
+# reports, and calls to the síndico or operating manager.
+
+buildings:
+  - slug: ponta-mar
+    name: "Ponta Mar Hotel"
+    bairro: meireles
+    address: "Av. Beira Mar, 2200, Meireles, Fortaleza - CE"
+    latitude: -3.7243
+    longitude: -38.4862
+    pool_letting: true
+    str_legal: true
+    reported_occupancy: 0.62
+    reported_adr_brl: 380
+    mgmt_fee_pct: 0.22
+    notes: "Beira-Mar frontage; mix of owner-occupied and pool units."
+    verify: true
+
+  - slug: mareiro
+    name: "Mareiro Hotel"
+    bairro: meireles
+    address: "Av. Beira Mar, 2380, Meireles, Fortaleza - CE"
+    latitude: -3.7232
+    longitude: -38.4840
+    pool_letting: true
+    str_legal: true
+    reported_occupancy: 0.65
+    reported_adr_brl: 410
+    mgmt_fee_pct: 0.22
+    notes: "Long-established pool letting operation."
+    verify: true
+
+  - slug: gran-mareiro
+    name: "Gran Mareiro Hotel"
+    bairro: mucuripe
+    address: "R. Joaquim Alves, 1 - Mucuripe, Fortaleza - CE"
+    latitude: -3.7221
+    longitude: -38.4793
+    pool_letting: true
+    str_legal: true
+    reported_occupancy: 0.60
+    reported_adr_brl: 360
+    mgmt_fee_pct: 0.22
+    notes: "Further east than Mareiro; slightly lower ADR."
+    verify: true
+
+  - slug: oasis-atlantico
+    name: "Oásis Atlântico Imperial"
+    bairro: meireles
+    address: "Av. Beira Mar, 2500, Meireles, Fortaleza - CE"
+    latitude: -3.7225
+    longitude: -38.4830
+    pool_letting: true
+    str_legal: true
+    reported_occupancy: 0.63
+    reported_adr_brl: 395
+    mgmt_fee_pct: 0.25
+    notes: "Portuguese-operated group; tight management overhead."
+    verify: true
+
+  - slug: seara-praia
+    name: "Seara Praia Hotel"
+    bairro: meireles
+    address: "Av. Beira Mar, 3080, Meireles, Fortaleza - CE"
+    latitude: -3.7245
+    longitude: -38.4870
+    pool_letting: true
+    str_legal: true
+    reported_occupancy: 0.64
+    reported_adr_brl: 420
+    mgmt_fee_pct: 0.22
+    notes: "Premium positioning; check current pool letting status."
+    verify: true
+
+  - slug: marina-park
+    name: "Marina Park Hotel"
+    bairro: praia-de-iracema
+    address: "Av. Pres. Castelo Branco, 400 - Praia de Iracema"
+    latitude: -3.7179
+    longitude: -38.5182
+    pool_letting: true
+    str_legal: true
+    reported_occupancy: 0.55
+    reported_adr_brl: 340
+    mgmt_fee_pct: 0.25
+    notes: "West end near centro; business + leisure mix."
+    verify: true
+
+  - slug: beach-class-international
+    name: "Beach Class International"
+    bairro: meireles
+    address: "Av. Beira Mar, Meireles, Fortaleza - CE"
+    latitude: -3.7235
+    longitude: -38.4852
+    pool_letting: true
+    str_legal: true
+    reported_occupancy: 0.60
+    reported_adr_brl: 450
+    mgmt_fee_pct: 0.23
+    notes: "Premium newer tower; verify pool letting program is still active."
+    verify: true

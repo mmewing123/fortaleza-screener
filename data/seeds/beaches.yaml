@@ -1,0 +1,41 @@
+# Simplified beach polylines for Fortaleza. Coordinates are (lat, lon)
+# sampled from OSM/Google; refine as needed. Shapely computes nearest
+# point on the polyline to each listing for beach_dist_m.
+
+beaches:
+  - name: "Praia de Iracema"
+    slug: iracema
+    premium: 0.8
+    points:
+      - [-3.7178, -38.5185]
+      - [-3.7190, -38.5130]
+      - [-3.7205, -38.5080]
+      - [-3.7220, -38.5020]
+
+  - name: "Praia do Meireles"
+    slug: meireles
+    premium: 1.0
+    points:
+      - [-3.7220, -38.5020]
+      - [-3.7235, -38.4920]
+      - [-3.7245, -38.4860]
+      - [-3.7248, -38.4800]
+
+  - name: "Praia do Mucuripe"
+    slug: mucuripe
+    premium: 0.85
+    points:
+      - [-3.7248, -38.4800]
+      - [-3.7240, -38.4730]
+      - [-3.7230, -38.4680]
+      - [-3.7215, -38.4640]
+
+  - name: "Praia do Futuro"
+    slug: praia-do-futuro
+    premium: 0.70
+    points:
+      - [-3.7310, -38.4590]
+      - [-3.7430, -38.4540]
+      - [-3.7560, -38.4490]
+      - [-3.7700, -38.4450]
+      - [-3.7840, -38.4410]

@@ -1,0 +1,77 @@
+# Fortaleza bairro reference data.
+#
+# IMPORTANT: these price/rent figures are PROXIES for scaffolding.
+# Refresh from FipeZap's monthly bulletin (https://www.fipezap.com.br/)
+# and Secovi-CE reports before relying on scores.
+#
+# tier: 1 = prime STR; 2 = secondary; 3 = deprioritized for STR
+# str_demand_score: qualitative 0..1 anchor for tourist demand
+#
+# as_of_date applies to the whole file.
+
+as_of_date: 2026-01-01
+
+bairros:
+  - slug: meireles
+    name: "Meireles"
+    tier: 1
+    fipezap_price_per_m2: 11500
+    fipezap_rent_per_m2: 52
+    str_demand_score: 0.90
+    notes: "Beira-Mar spine. Premium addresses, highest ADR, strong seasonality."
+
+  - slug: mucuripe
+    name: "Mucuripe"
+    tier: 1
+    fipezap_price_per_m2: 9800
+    fipezap_rent_per_m2: 45
+    str_demand_score: 0.82
+    notes: "Beira-Mar east end; mix of older high-rises and newer towers."
+
+  - slug: praia-de-iracema
+    name: "Praia de Iracema"
+    tier: 1
+    fipezap_price_per_m2: 8200
+    fipezap_rent_per_m2: 40
+    str_demand_score: 0.78
+    notes: "Tourist-legible but uneven asset quality; verify building condition."
+
+  - slug: praia-do-futuro-i
+    name: "Praia do Futuro I"
+    tier: 2
+    fipezap_price_per_m2: 6500
+    fipezap_rent_per_m2: 32
+    str_demand_score: 0.70
+    notes: "Big beach / barraca scene; lower unit costs, further from amenities."
+
+  - slug: praia-do-futuro-ii
+    name: "Praia do Futuro II"
+    tier: 2
+    fipezap_price_per_m2: 6000
+    fipezap_rent_per_m2: 30
+    str_demand_score: 0.65
+    notes: "Similar to PF-I but more dispersed supply."
+
+  - slug: aldeota
+    name: "Aldeota"
+    tier: 3
+    fipezap_price_per_m2: 9200
+    fipezap_rent_per_m2: 42
+    str_demand_score: 0.30
+    notes: "Great LT rental, weak STR — keep for comp medians only."
+
+  - slug: varjota
+    name: "Varjota"
+    tier: 3
+    fipezap_price_per_m2: 9500
+    fipezap_rent_per_m2: 44
+    str_demand_score: 0.35
+    notes: "Restaurant district; adjacent to Meireles; poor STR fit."
+
+  - slug: coco
+    name: "Cocó"
+    tier: 3
+    fipezap_price_per_m2: 8800
+    fipezap_rent_per_m2: 40
+    str_demand_score: 0.25
+    notes: "Residential, tree-lined; not tourist-facing."

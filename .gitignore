@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.ipynb_checkpoints/
+
+# Keep the DuckDB file tracked so CI-produced scores persist
+# (comment out the next line if you prefer a clean repo)
+# data/*.duckdb
+data/*.duckdb.wal
+
+.DS_Store
+.env
+.streamlit/secrets.toml

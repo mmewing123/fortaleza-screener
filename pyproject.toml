@@ -1,0 +1,36 @@
+[project]
+name = "fortaleza-screener"
+version = "0.1.0"
+description = "STR-focused real estate screener for Fortaleza, Brazil (non-resident/USD view)"
+requires-python = ">=3.11"
+dependencies = [
+    "httpx>=0.27",
+    "selectolax>=0.3.21",
+    "duckdb>=1.1",
+    "pydantic>=2.8",
+    "pyyaml>=6.0",
+    "shapely>=2.0",
+    "geopy>=2.4",
+    "pandas>=2.2",
+    "python-dateutil>=2.9",
+    "tenacity>=9.0",
+    "rich>=13.7",
+]
+
+[project.optional-dependencies]
+dashboard = [
+    "streamlit>=1.38",
+    "folium>=0.17",
+    "streamlit-folium>=0.22",
+    "plotly>=5.24",
+]
+
+[project.scripts]
+fortaleza = "fortaleza.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/fortaleza"]
