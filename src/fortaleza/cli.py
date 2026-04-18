@@ -24,6 +24,7 @@ from .ingest.vivareal import run as scrape_vivareal
 from .enrich.geocode import backfill_missing_coords
 from .model.fx import latest_rate, refresh_and_scenarios, derive_scenarios, fetch_history
 from .model.composite import score_all
+from .build_html import render as render_html
 
 console = Console()
 
@@ -117,6 +118,12 @@ def cmd_top(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_build_html(args: argparse.Namespace) -> int:
+    path = render_html()
+    console.print(f"[green]Wrote[/green] {path}")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(prog="fortaleza")
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -138,6 +145,8 @@ def main(argv: list[str] | None = None) -> int:
     sp_top = sub.add_parser("top", help="Print top-ranked listings")
     sp_top.add_argument("--n", type=int, default=20)
 
+    sub.add_parser("build-html", help="Render docs/index.html for GitHub Pages")
+
     args = p.parse_args(argv)
     return {
         "init": cmd_init,
@@ -147,6 +156,7 @@ def main(argv: list[str] | None = None) -> int:
         "score": cmd_score,
         "pipeline": cmd_pipeline,
         "top": cmd_top,
+        "build-html": cmd_build_html,
     }[args.cmd](args)
 
 
