@@ -39,6 +39,7 @@ def _fetch_rows() -> tuple[list[dict], dict]:
             FROM listings_latest l
             LEFT JOIN scores s USING (source, external_id)
             WHERE s.composite_score IS NOT NULL
+              AND s.run_date = (SELECT MAX(run_date) FROM scores)
             ORDER BY s.composite_score DESC
             """
         ).fetch_df().to_dict("records")
