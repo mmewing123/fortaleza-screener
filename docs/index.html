@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Fortaleza STR Screener</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  :root {
+    --fg: #1b1f23; --muted: #666; --bg: #fafbfc; --card: #fff;
+    --border: #e1e4e8; --accent: #0366d6;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    margin: 0; padding: 0; background: var(--bg); color: var(--fg);
+  }
+  header {
+    background: var(--card); border-bottom: 1px solid var(--border);
+    padding: 18px 28px;
+  }
+  header h1 { margin: 0 0 4px 0; font-size: 22px; }
+  header .meta { color: var(--muted); font-size: 13px; }
+  main { padding: 20px 28px; max-width: 1400px; margin: 0 auto; }
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 22px; }
+  .kpi { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 14px 16px; }
+  .kpi .label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .kpi .value { font-size: 22px; font-weight: 600; margin-top: 4px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 16px; margin-bottom: 22px; }
+  .card h2 { margin: 0 0 12px 0; font-size: 16px; }
+  #map { height: 460px; border-radius: 4px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--border); }
+  th { background: #f6f8fa; font-weight: 600; color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.03em; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  tr:hover td { background: #f6f8fa; }
+  .legality { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+  .legality-green { background: #d4edda; color: #155724; }
+  .legality-yellow { background: #fff3cd; color: #856404; }
+  .legality-red { background: #f8d7da; color: #721c24; }
+  .score-cell { position: relative; height: 20px; width: 110px; background: #eef; border-radius: 3px; overflow: hidden; margin-left: auto; }
+  .score-cell .score-bar { position: absolute; top: 0; left: 0; bottom: 0; opacity: 0.45; }
+  .score-cell span { position: relative; padding-left: 8px; line-height: 20px; font-weight: 600; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .caveat { background: #fff8e1; border-left: 3px solid #f39c12; padding: 10px 14px; font-size: 13px; color: #6d5300; margin-bottom: 18px; border-radius: 3px; }
+  footer { color: var(--muted); font-size: 12px; text-align: center; padding: 24px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🏖️ Fortaleza STR Screener</h1>
+  <div class="meta">Buy-to-STR screening for non-resident investors · USD/BRL spot: <b>4.9695</b> (as of 2026-04-17) · last run 2026-04-18</div>
+</header>
+<main>
+
+  <div class="caveat">
+    <b>Work in progress.</b> Condohotel ADR and occupancy figures are placeholders pending verification.
+    FipeZap bairro medians are proxies. Use for directional ranking only — not investment advice.
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="label">Listings scored</div><div class="value">14</div></div>
+    <div class="kpi"><div class="label">Top score</div><div class="value">0.503</div></div>
+    <div class="kpi"><div class="label">Top USD IRR (base)</div><div class="value">6.73%</div></div>
+    <div class="kpi"><div class="label">Median USD IRR</div><div class="value">6.23%</div></div>
+  </div>
+
+  <div class="card">
+    <h2>Map</h2>
+    <div id="map"></div>
+  </div>
+
+  <div class="card">
+    <h2>Ranked listings</h2>
+    <div style="overflow-x: auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th><th>Bairro</th><th>Title</th><th>Type</th>
+            <th class="num">m²</th><th class="num">Price</th>
+            <th>Legality</th>
+            <th class="num">Est. ADR</th><th class="num">Occ</th>
+            <th class="num">USD IRR (base)</th>
+            <th class="num">Score</th>
+            <th>Link</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+            <tr>
+              <td>1</td>
+              <td>meireles</td>
+              <td>Ponta Mar Hotel</td>
+              <td>condohotel</td>
+              <td class="num">35</td>
+              <td class="num">R$782,545</td>
+              <td>
+                <span class="legality legality-green">
+                  green
+                </span>
+              </td>
+              <td class="num">R$565</td>
+              <td class="num">80.0%</td>
+              <td class="num">6.73%</td>
+              <td class="num">
+                <div class="score-cell">
+                  <div class="score-bar" style="width:50%; background:#f39c12;"></div>
+                  <span>0.503</span>
+                </div>
+              </td>
+              <td>—</td>
+            </tr>
+            
+            <tr>
+              <td>2</td>
+              <td>meireles</td>
+              <td>Ponta Mar Hotel</td>
+              <td>condohotel</td>
+              <td class="num">35</td>
+              <td class="num">R$782,545</td>
+              <td>
+                <span class="legality legality-green">
+                  green
+                </span>
+              </td>
+              <td class="num">R$565</td>
+              <td class="num">80.0%</td>
+              <td class="num">6.73%</td>
+              <td class="num">
+                <div class="score-cell">
+                  <div class="score-bar" style="width:50%; background:#f39c12;"></div>
+                  <span>0.503</span>
+                </div>
+              </td>
+              <td>—</td>
+            </tr>
+            
+            <tr>
+              <td>3</td>
+              <td>praia-de-iracema</td>
+              <td>Marina Park Hotel</td>
+              <td>condohotel</td>
+              <td class="num">35</td>
+              <td class="num">R$597,231</td>
+              <td>
+                <span class="legality legality-green">
+                  green
+                </span>
+              </td>
+              <td class="num">R$502</td>
+              <td class="num">75.9%</td>
+              <td class="num">7.61%</td>
+              <td class="num">
+                <div class="score-cell">
+                  <div class="score-bar" style="width:50%; background:#f39c12;"></div>
+                  <span>0.498</span>
+                </div>
+              </td>
+              <td>—</td>
+            </tr>
+            
+            <tr>
+              <td>4</td>
+              <td>praia-de-iracema</td>
+              <td>Marina Park Hotel</td>
+              <td>condohotel</td>
+              <td class="num">35</td>
+              <td class="num">R$597,231</td>
+              <td>
+                <span class="legality legality-green">
+                  green
+                </span>
+              </td>
+              <td class="num">R$502</td>
+              <td class="num">75.9%</td>
+              <td class="num">7.61%</td>
+              <td class="num">
+                <div class="score-cell">
+                  <div class="score-bar" style="width:50%; background:#f39c12;"></div>
+                  <span>0.498</span>
+                </div>
+              </td>
+              <td>—</td>
+            </tr>
+            
+            <tr>
+              <td>5</td>
+              <td>meireles</td>
+              <td>Oásis Atlântico Imperial</td>
+              <td>condohotel</td>
+              <td class="num">35</td>
+              <td class="num">R$794,765</td>
+              <td>
+                <span class="legality legality-green">
+                  green
+                </span>
+              </td>
+              <td class="num">R$561</td>
+              <td class="num">80.0%</td>
+              <td class="num">6.49%</td>
+              <td class="num">
+                <div class="score-cell">
+                  <div class="score-bar" style="width:49%; background:#f39c12;"></div>
+                  <span>0.494</span>
+                </div>
+              </td>
+              <td>—</td>
+            </tr>
+            
+            <tr>
+              <td>6</td>
+              <td>meireles</td>
+              <td>Oásis Atlântico Imperial</td>
+              <td>condohotel</td>
+              <td class="num">35</td>
+              <td class="num">R$794,765</td>
+              <td>
+                <span class="legality legality-green">
+                  green
+                </span>
+              </td>
+              <td class="num">R$561</td>
+              <td class="num">80.0%</td>
+              <td class="num">6.49%</td>
+              <td class="num">
+                <div class="score-cell">
+                  <div class="score-bar" style="width:49%; background:#f39c12;"></div>
+                  <span>0.494</span>
+                </div>
+              </td>
+              <td>—</td>
+            </tr>
+            
+            <tr>
+              <td>7</td>
+              <td>mucuripe</td>
+              <td>Gran Mareiro Hotel</td>
+              <td>condohotel</td>
+              <td class="num">35</td>
+              <td class="num">R$717,444</td>
+              <td>
+                <span class="legality legality-green">
+                  green
+                </span>
+              </td>
+              <td class="num">R$511</td>
+              <td class="num">77.9%</td>
+              <td class="num">6.23%</td>
+              <td class="num">
+                <div class="score-cell">
+                  <div class="score-bar" style="width:46%; background:#f39c12;"></div>
+                  <span>0.461</span>
+                </div>
+              </td>
+              <td>—</td>
+            </tr>
+            
+            <tr>
+              <td>8</td>
+              <td>mucuripe</td>
+              <td>Gran Mareiro Hotel</td>
+              <td>condohotel</td>
+              <td class="num">35</td>
+              <td class="num">R$717,444</td>
+              <td>
+                <span class="legality legality-green">
+                  green
+                </span>
+              </td>
+              <td class="num">R$511</td>
+              <td class="num">77.9%</td>
+              <td class="num">6.23%</td>
+              <td class="num">
+                <div class="score-cell">
+                  <div class="score-bar" style="width:46%; background:#f39c12;"></div>
+                  <span>0.461</span>
+                </div>
+              </td>
+              <td>—</td>
+            </tr>
+            
+            <tr>
+              <td>9</td>
+              <td>meireles</td>
+              <td>Mareiro Hotel</td>
+              <td>condohotel</td>
+              <td class="num">35</td>
+              <td class="num">R$885,180</td>
+              <td>
+                <span class="legality legality-green">
+                  green
+                </span>
+              </td>
+              <td class="num">R$565</td>
+              <td class="num">80.0%</td>
+              <td class="num">5.59%</td>
+              <td class="num">
+                <div class="score-cell">
+                  <div class="score-bar" style="width:44%; background:#c0392b;"></div>
+                  <span>0.444</span>
+                </div>
+              </td>
+              <td>—</td>
+            </tr>
+            
+            <tr>
+              <td>10</td>
+              <td>meireles</td>
+              <td>Beach Class International</td>
+              <td>condohotel</td>
+              <td class="num">35</td>
+              <td class="num">R$885,308</td>
+              <td>
+                <span class="legality legality-green">
+                  green
+                </span>
+              </td>
+              <td class="num">R$565</td>
+              <td class="num">80.0%</td>
+              <td class="num">5.59%</td>
+              <td class="num">
+                <div class="score-cell">
+                  <div class="score-bar" style="width:44%; background:#c0392b;"></div>
+                  <span>0.444</span>
+                </div>
+              </td>
+              <td>—</td>
+            </tr>
+            
+            <tr>
+              <td>11</td>
+              <td>meireles</td>
+              <td>Mareiro Hotel</td>
+              <td>condohotel</td>
+              <td class="num">35</td>
+              <td class="num">R$885,180</td>
+              <td>
+                <span class="legality legality-green">
+                  green
+                </span>
+              </td>
+              <td class="num">R$565</td>
+              <td class="num">80.0%</td>
+              <td class="num">5.59%</td>
+              <td class="num">
+                <div class="score-cell">
+                  <div class="score-bar" style="width:44%; background:#c0392b;"></div>
+                  <span>0.444</span>
+                </div>
+              </td>
+              <td>—</td>
+            </tr>
+            
+            <tr>
+              <td>12</td>
+              <td>meireles</td>
+              <td>Beach Class International</td>
+              <td>condohotel</td>
+              <td class="num">35</td>
+              <td class="num">R$885,308</td>
+              <td>
+                <span class="legality legality-green">
+                  green
+                </span>
+              </td>
+              <td class="num">R$565</td>
+              <td class="num">80.0%</td>
+              <td class="num">5.59%</td>
+              <td class="num">
+                <div class="score-cell">
+                  <div class="score-bar" style="width:44%; background:#c0392b;"></div>
+                  <span>0.444</span>
+                </div>
+              </td>
+              <td>—</td>
+            </tr>
+            
+            <tr>
+              <td>13</td>
+              <td>meireles</td>
+              <td>Seara Praia Hotel</td>
+              <td>condohotel</td>
+              <td class="num">35</td>
+              <td class="num">R$892,819</td>
+              <td>
+                <span class="legality legality-green">
+                  green
+                </span>
+              </td>
+              <td class="num">R$565</td>
+              <td class="num">80.0%</td>
+              <td class="num">5.51%</td>
+              <td class="num">
+                <div class="score-cell">
+                  <div class="score-bar" style="width:44%; background:#c0392b;"></div>
+                  <span>0.440</span>
+                </div>
+              </td>
+              <td>—</td>
+            </tr>
+            
+            <tr>
+              <td>14</td>
+              <td>meireles</td>
+              <td>Seara Praia Hotel</td>
+              <td>condohotel</td>
+              <td class="num">35</td>
+              <td class="num">R$892,819</td>
+              <td>
+                <span class="legality legality-green">
+                  green
+                </span>
+              </td>
+              <td class="num">R$565</td>
+              <td class="num">80.0%</td>
+              <td class="num">5.51%</td>
+              <td class="num">
+                <div class="score-cell">
+                  <div class="score-bar" style="width:44%; background:#c0392b;"></div>
+                  <span>0.440</span>
+                </div>
+              </td>
+              <td>—</td>
+            </tr>
+            
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<footer>
+  Generated from <a href="https://github.com/mmewing123/fortaleza-screener">mmewing123/fortaleza-screener</a> ·
+  Updated daily via GitHub Actions.
+</footer>
+
+<script>
+  const listings = [{"id": "ponta-mar", "title": "Ponta Mar Hotel", "bairro": "meireles", "lat": -3.7243, "lon": -38.4862, "score": 0.5035, "price": 782545.4, "adr": 565.44, "occ": 0.8, "irr": 0.06731674645822691, "legality": "green", "url": null}, {"id": "ponta-mar", "title": "Ponta Mar Hotel", "bairro": "meireles", "lat": -3.7243, "lon": -38.4862, "score": 0.5035, "price": 782545.4, "adr": 565.44, "occ": 0.8, "irr": 0.06731674645822691, "legality": "green", "url": null}, {"id": "marina-park", "title": "Marina Park Hotel", "bairro": "praia-de-iracema", "lat": -3.7179, "lon": -38.5182, "score": 0.498, "price": 597231.2500000001, "adr": 501.54, "occ": 0.759, "irr": 0.07611547791107404, "legality": "green", "url": null}, {"id": "marina-park", "title": "Marina Park Hotel", "bairro": "praia-de-iracema", "lat": -3.7179, "lon": -38.5182, "score": 0.498, "price": 597231.2500000001, "adr": 501.54, "occ": 0.759, "irr": 0.07611547791107404, "legality": "green", "url": null}, {"id": "oasis-atlantico", "title": "O\u00e1sis Atl\u00e2ntico Imperial", "bairro": "meireles", "lat": -3.7225, "lon": -38.483, "score": 0.4936, "price": 794764.6875, "adr": 560.69, "occ": 0.8, "irr": 0.06491382619704521, "legality": "green", "url": null}, {"id": "oasis-atlantico", "title": "O\u00e1sis Atl\u00e2ntico Imperial", "bairro": "meireles", "lat": -3.7225, "lon": -38.483, "score": 0.4936, "price": 794764.6875, "adr": 560.69, "occ": 0.8, "irr": 0.06491382619704521, "legality": "green", "url": null}, {"id": "gran-mareiro", "title": "Gran Mareiro Hotel", "bairro": "mucuripe", "lat": -3.7221, "lon": -38.4793, "score": 0.4612, "price": 717444.0, "adr": 510.67, "occ": 0.779, "irr": 0.062331082213357335, "legality": "green", "url": null}, {"id": "gran-mareiro", "title": "Gran Mareiro Hotel", "bairro": "mucuripe", "lat": -3.7221, "lon": -38.4793, "score": 0.4612, "price": 717444.0, "adr": 510.67, "occ": 0.779, "irr": 0.062331082213357335, "legality": "green", "url": null}, {"id": "mareiro", "title": "Mareiro Hotel", "bairro": "meireles", "lat": -3.7232, "lon": -38.484, "score": 0.444, "price": 885179.75, "adr": 565.44, "occ": 0.8, "irr": 0.05588316738551681, "legality": "green", "url": null}, {"id": "beach-class-international", "title": "Beach Class International", "bairro": "meireles", "lat": -3.7235, "lon": -38.4852, "score": 0.444, "price": 885307.5, "adr": 565.44, "occ": 0.8, "irr": 0.055870562519037284, "legality": "green", "url": null}, {"id": "mareiro", "title": "Mareiro Hotel", "bairro": "meireles", "lat": -3.7232, "lon": -38.484, "score": 0.444, "price": 885179.75, "adr": 565.44, "occ": 0.8, "irr": 0.05588316738551681, "legality": "green", "url": null}, {"id": "beach-class-international", "title": "Beach Class International", "bairro": "meireles", "lat": -3.7235, "lon": -38.4852, "score": 0.444, "price": 885307.5, "adr": 565.44, "occ": 0.8, "irr": 0.055870562519037284, "legality": "green", "url": null}, {"id": "seara-praia", "title": "Seara Praia Hotel", "bairro": "meireles", "lat": -3.7245, "lon": -38.487, "score": 0.4399, "price": 892819.2, "adr": 565.44, "occ": 0.8, "irr": 0.05513564074688444, "legality": "green", "url": null}, {"id": "seara-praia", "title": "Seara Praia Hotel", "bairro": "meireles", "lat": -3.7245, "lon": -38.487, "score": 0.4399, "price": 892819.2, "adr": 565.44, "occ": 0.8, "irr": 0.05513564074688444, "legality": "green", "url": null}];
+  const map = L.map('map').setView([-3.728, -38.495], 13);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; OpenStreetMap &copy; CARTO', maxZoom: 19
+  }).addTo(map);
+
+  function colorFor(score) {
+    if (score >= 0.55) return '#1b9e4b';
+    if (score >= 0.45) return '#f39c12';
+    return '#c0392b';
+  }
+
+  listings.forEach(l => {
+    if (l.lat == null || l.lon == null) return;
+    const m = L.circleMarker([l.lat, l.lon], {
+      radius: 6 + 10 * l.score,
+      color: colorFor(l.score), fillColor: colorFor(l.score),
+      fillOpacity: 0.75, weight: 1
+    }).addTo(map);
+    const priceBRL = l.price ? 'R$' + l.price.toLocaleString('en-US', {maximumFractionDigits:0}) : '—';
+    const adr = l.adr ? 'R$' + l.adr.toFixed(0) : '—';
+    const occ = l.occ ? (l.occ * 100).toFixed(0) + '%' : '—';
+    const irr = l.irr != null ? (l.irr * 100).toFixed(2) + '%' : '—';
+    const link = l.url ? `<a href="${l.url}" target="_blank">open listing</a>` : '';
+    m.bindPopup(`
+      <b>${l.title}</b><br>
+      ${l.bairro} · legality: ${l.legality}<br>
+      Price: ${priceBRL}<br>
+      ADR: ${adr} × Occ: ${occ}<br>
+      USD IRR (base): <b>${irr}</b><br>
+      Composite: <b>${l.score.toFixed(3)}</b><br>
+      ${link}
+    `);
+  });
+</script>
+</body>
+</html>
